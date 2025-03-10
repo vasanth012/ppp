@@ -1,0 +1,6 @@
+filename,mfcc1,mfcc2,mfcc3,mfcc4,mfcc5,label
+audio1.wav,12.5,-2.3,4.8,1.2,-0.5,Happy
+audio2.wav,8.2,-1.4,3.1,0.9,-0.3,Sad
+audio3.wav,15.3,-3.1,5.2,1.5,-0.6,Angry
+audio4.wav,10.1,-2.7,4.0,1.0,-0.4,Neutral
+audio5.wav,7.8,-1.9,3.5,0.7,-0.2,Surprised
