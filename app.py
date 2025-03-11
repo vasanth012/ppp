@@ -17,7 +17,7 @@ else:
     model = None  # Ensure the app doesn't break if the model is missing
 
 # Emotion labels (Modify if your model has different labels)
-EMOTIONS = ['Neutral', 'Happy', 'Sad', 'Angry', 'Fearful', 'Disgust', 'Surprised']
+EMOTIONS = ['Neutral', 'Happy', 'Angry', 'Sad', 'Fearful', 'Disgust', 'Surprised']
 
 @app.route('/')
 def home():
@@ -26,11 +26,11 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     if 'file' not in request.files:
-        return "❌ No file uploaded!"
+        return render_template('result.html', filename="No File", emotion="❌ No file uploaded!")
 
     file = request.files['file']
     if file.filename == '':
-        return "❌ No selected file!"
+        return render_template('result.html', filename="No File", emotion="❌ No selected file!")
 
     # Save the uploaded file
     file_path = os.path.join(UPLOAD_FOLDER, file.filename)
@@ -45,9 +45,9 @@ def predict():
         else:
             predicted_emotion = "Unknown (Model not loaded)"
     except Exception as e:
-        return f"⚠️ Error processing file: {str(e)}"
+        return render_template('result.html', filename=file.filename, emotion=f"⚠️ Error: {str(e)}")
 
-    return f"✅ File uploaded successfully: {file.filename}. Predicted Emotion: {predicted_emotion}"
+    return render_template('result.html', filename=file.filename, emotion=predicted_emotion)
 
 def extract_features(file_path):
     """
