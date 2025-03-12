@@ -4,34 +4,63 @@
     <title>Prediction Result</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             text-align: center;
-            background-color: #f4f4f4;
+            background: linear-gradient(45deg, #FFDDC1, #FFABAB, #FFC3A0, #D5AAFF, #85E3FF);
+            background-size: 400% 400%;
+            animation: gradientBG 5s infinite alternate;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
         }
         .container {
             margin-top: 50px;
         }
-        .emotion-circle {
-            width: 200px;
-            height: 200px;
+        .emotion-pie {
+            width: 250px;
+            height: 250px;
             border-radius: 50%;
+            background: conic-gradient(
+                #D3D3D3 0% 14%, /* Neutral */
+                #FFD700 14% 28%, /* Happy */
+                #FF0000 28% 42%, /* Angry */
+                #0000FF 42% 56%, /* Sad */
+                #800080 56% 70%, /* Fearful */
+                #008000 70% 84%, /* Disgust */
+                #FFA500 84% 100% /* Surprised */
+            );
+            position: relative;
+            margin: 20px auto;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .emotion-label {
+            position: absolute;
             font-size: 16px;
             font-weight: bold;
-            color: #fff;
-            margin: 20px auto;
-            padding: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease-in-out, width 0.3s ease-in-out, height 0.3s ease-in-out;
-            background-color: #ccc;
+            color: black;
+            text-align: center;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 5px 10px;
+            border-radius: 5px;
         }
-        .emotion-circle.active {
-            transform: scale(1.2); /* Expand the size */
-            width: 220px;
-            height: 220px;
+        .highlight {
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            background-color: red !important;
+            padding: 8px;
+            border-radius: 8px;
+            animation: pulse 1s infinite alternate;
+        }
+        @keyframes pulse {
+            0% { background-color: red; }
+            100% { background-color: green; }
         }
         .filename {
             font-size: 14px;
@@ -40,7 +69,8 @@
         }
         .success {
             color: #28a745;
-            font-size: 20px;
+            font-size: 22px;
+            font-weight: bold;
         }
         .back-link {
             text-decoration: none;
@@ -48,6 +78,7 @@
             color: #007BFF;
             display: inline-block;
             margin-top: 20px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -55,32 +86,28 @@
     <div class="container">
         <h2 class="success">✅ File Uploaded Successfully!</h2>
         <p class="filename">{{ filename }}</p>
-        <div class="emotion-circle" id="emotionCircle">
-            Neutral, Happy, Angry, Sad, Fearful, Disgust, Surprised
+        <div class="emotion-pie" id="emotionPie">
+            <span class="emotion-label" style="top: 10%; left: 50%;">Neutral</span>
+            <span class="emotion-label" style="top: 30%; left: 80%;">Happy</span>
+            <span class="emotion-label" style="top: 55%; left: 90%;">Angry</span>
+            <span class="emotion-label" style="top: 80%; left: 70%;">Sad</span>
+            <span class="emotion-label" style="top: 90%; left: 40%;">Fearful</span>
+            <span class="emotion-label" style="top: 70%; left: 10%;">Disgust</span>
+            <span class="emotion-label" style="top: 40%; left: 5%;">Surprised</span>
         </div>
         <a class="back-link" href="/">🔙 Go Back</a>
     </div>
 
     <script>
-        // Change circle color and size dynamically based on emotion
-        const emotionCircle = document.getElementById("emotionCircle");
+        const emotionPie = document.getElementById("emotionPie");
         const emotion = "{{ emotion }}".toLowerCase();
 
-        const colors = {
-            "neutral": "#A9A9A9",
-            "happy": "#FFD700",
-            "angry": "#FF4500",
-            "sad": "#FF0000",  // Sad is Red
-            "fearful": "#8B0000",
-            "disgust": "#556B2F",
-            "surprised": "#FFA07A"
-        };
-
-        if (colors[emotion]) {
-            emotionCircle.style.backgroundColor = colors[emotion];
-            emotionCircle.classList.add("active");  // Expand size when emotion is detected
-            emotionCircle.innerHTML = emotion.charAt(0).toUpperCase() + emotion.slice(1);
-        }
+        const labels = document.querySelectorAll(".emotion-label");
+        labels.forEach(label => {
+            if (label.innerText.toLowerCase() === emotion) {
+                label.classList.add("highlight");
+            }
+        });
     </script>
 </body>
 </html>

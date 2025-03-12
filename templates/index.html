@@ -8,11 +8,15 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #f4f4f4;
             padding: 20px;
+            overflow: hidden;
+            position: relative;
+            animation: fadeIn 1.5s ease-in;
+            transition: background-color 1s ease-in-out;
         }
         h1 {
             color: #333;
+            animation: slideDown 1s ease-out;
         }
         .container {
             background: white;
@@ -21,6 +25,9 @@
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             max-width: 500px;
             margin: auto;
+            position: relative;
+            z-index: 2;
+            animation: popUp 1s ease-in-out;
         }
         button {
             background: #28a745;
@@ -30,14 +37,43 @@
             cursor: pointer;
             border-radius: 5px;
             font-size: 16px;
+            transition: transform 0.2s, background 0.3s;
         }
         button:hover {
             background: #218838;
+            transform: scale(1.1);
+        }
+        input[type="file"] {
+            transition: transform 0.3s;
+        }
+        input[type="file"]:hover {
+            transform: scale(1.05);
+        }
+        .emoji {
+            position: absolute;
+            font-size: 50px;
+            opacity: 0.7;
+            animation: drop 5s infinite linear;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes popUp {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        @keyframes drop {
+            from { transform: translateY(-100px); opacity: 0; }
+            to { transform: translateY(100vh); opacity: 1; }
         }
     </style>
 </head>
-<body>
-
+<body onclick="changeToRainbow()">
     <h1>Speech Emotion Recognition</h1>
     <div class="container">
         <p>Upload your audio file and detect emotions.</p>
@@ -47,6 +83,37 @@
             <button type="submit">Upload & Analyze</button>
         </form>
     </div>
+    
+    <script>
+        const emojis = ['😐', '😊', '😠', '😢', '😨', '🤢', '😲'];
+        const colors = [
+            '#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#8B00FF'
+        ];
 
+        function changeBackground() {
+            const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+            document.body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        function changeToRainbow() {
+            let i = 0;
+            const interval = setInterval(() => {
+                document.body.style.backgroundColor = colors[i];
+                i = (i + 1) % colors.length;
+            }, 500);
+            setTimeout(() => clearInterval(interval), 5000);
+        }
+        
+        for (let i = 0; i < 20; i++) {
+            let emoji = document.createElement('div');
+            emoji.classList.add('emoji');
+            emoji.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+            emoji.style.left = Math.random() * 100 + 'vw';
+            emoji.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.body.appendChild(emoji);
+        }
+        
+        setInterval(changeBackground, 3000);
+    </script>
 </body>
 </html>
